@@ -8,7 +8,7 @@ let toDoItems = [];
 // Tu código acá:
 
 let createdBy = document.querySelector("#createdBy");
-createdBy.innerHTML= "Aplicación creada por Jesús";
+createdBy.innerHTML += " Jesús";
 
 // Crear una clase denominada 'ToDo' cuyo constructor debe recibir un único parámetro del tipo string
 // con el nombre 'description' que será justamente la descripción del ToDo.
@@ -55,14 +55,18 @@ ToDo.prototype.completeToDo = function (){
 function buildToDo(todo, index) {
   // Tu código acá:
 let ToDoShell = document.createElement("div");
-ToDoShell.addEventListener("click",completeToDo);
-ToDoShell.document.setAttribute("class","ToDoShell");
+
+ToDoShell.className = "toDoShell"; // toDoShell.classList.add("toDoShell") o tambien toDoShell.setAttribute("class","toDoShell")
+
 let toDoText = document.createElement("span");
+
 toDoText.innerHTML = todo.description;
-toDoText.document.setAttribute("id",index);
-if (todo.complete) {
-toDoText.document.setAttribute("class","completeTex");
-}
+
+toDoText.id = index;
+toDoText.onclick = completeToDo;
+toDoText.className = todo.complete ? "completeText" : "";
+
+
 ToDoShell.appendChild(toDoText);
 return ToDoShell;
 }
@@ -75,8 +79,8 @@ return ToDoShell;
 function buildToDos(toDos) {
   // Tu código acá:
 
-  let resultado = toDos.map(function (todo,index){return buildToDo(todo,index)})//toDos.map(buildtoDo)
-return resultado;
+  let resultado = toDos.map((todo,index)=>{return buildToDo(todo,index)})//toDos.map(buildtoDo)
+return resultado; // tambien pude ser " return toDos.map(buildToDo) "
 
 }
 
@@ -95,7 +99,9 @@ function displayToDos() {
 let toDoContainer = document.querySelector("#toDoContainer");
 toDoContainer.innerHTML = "";
 let toDos= buildToDos(toDoItems);
-toDos.forEach((todo) => {toDoContainer.appendChild(todo)});
+toDos.forEach((item) => {
+  toDoContainer.appendChild(item)
+});
 }
 
 
@@ -110,11 +116,11 @@ toDos.forEach((todo) => {toDoContainer.appendChild(todo)});
 
 function addToDo() {
   // Tu código acá:
-let toDoValue= document.getElementById("toDoInput").value;
-let newToDo=   new ToDo(toDoValue);
-toDoItems.push(newToDo);
-document.getElementById("toDoInput").value = "";
-displayToDos();
+let toDoInput= document.querySelector("#toDoInput").value;
+let todo=   new ToDo(toDoInput);
+toDoItems.push(todo)
+toDoInput = "";
+displayToDos()
 }
 
 // Agregar un 'Event Listener' para que cada vez que el botón 'AGREGAR' sea clickeado
@@ -124,15 +130,8 @@ displayToDos();
 
 // Tu código acá:
 
-let agregar = document.querySelector("#addButton");
-agregar.addEventListener('click', addToDo);
-document
-.querySelector("#addButton")
-.addEventListener("keypress",function (event){
-  if (event.keyCode === 13){
-    addToDo();
-  }
-});
+let addButton = document.querySelector("#addButton");
+addButton.onclick = function (){addToDo()} // addButton.addEventListener("click",function (){addToDo()} ) "este metodo te permite agregar multiples funciones escuchadores"
 
 // La función completeToDo se va a ejecutar cuando queramos completar un todo
 // [NOTA: Algunas cuestiones a tener en cuenta
